@@ -45,7 +45,6 @@
 
   <build>
     <plugins>
-
       <!-- Плагин проверяет стиль и качество исходного кода. -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
