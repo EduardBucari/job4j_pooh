@@ -1,5 +1,9 @@
 package ru.job4j.pooh;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
 /**
  * class Req - класс, служит для парсинга входящего запроса.
  * httpRequestType - GET или POST. Он указывает на тип запроса.
@@ -21,8 +25,35 @@ public class Req {
     }
 
     public static Req of(String content) {
+        String httpRequestType = "";
+        String poohMode = "";
+        String sourceName = "";
+        String param = "";
 
-        return new Req(null, null, null, null);
+        Scanner scan = new Scanner(content);
+        List<String> array = new ArrayList<>();
+        while (scan.hasNextLine()) {
+            String str = scan.nextLine();
+            if (!str.isEmpty()) {
+                array.add(str);
+            }
+        }
+        if (array.size() > 0) {
+            if (array.get(0).contains("POST") || array.get(0).contains("GET")) {
+                String[] pars = array.get(0).split("(\\s/)|/|\\s");
+                httpRequestType = pars[0];
+                poohMode = pars[1];
+                sourceName = pars[2];
+                if (array.get(0).contains("GET")) {
+                    if (pars.length == 6) {
+                        param = pars[3];
+                    }
+                } else {
+                    param = array.get(array.size() - 1);
+                }
+            }
+        }
+        return new Req(httpRequestType, poohMode, sourceName, param);
     }
 
     public String httpRequestType() {
